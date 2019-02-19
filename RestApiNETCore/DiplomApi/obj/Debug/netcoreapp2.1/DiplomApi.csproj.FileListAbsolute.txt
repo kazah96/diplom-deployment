@@ -1,0 +1,14 @@
+C:\Users\Ramil\Desktop\DiplomJob\RestApiNETCore\DiplomApi\bin\Debug\netcoreapp2.1\DiplomApi.deps.json
+C:\Users\Ramil\Desktop\DiplomJob\RestApiNETCore\DiplomApi\bin\Debug\netcoreapp2.1\DiplomApi.runtimeconfig.json
+C:\Users\Ramil\Desktop\DiplomJob\RestApiNETCore\DiplomApi\bin\Debug\netcoreapp2.1\DiplomApi.runtimeconfig.dev.json
+C:\Users\Ramil\Desktop\DiplomJob\RestApiNETCore\DiplomApi\bin\Debug\netcoreapp2.1\DiplomApi.dll
+C:\Users\Ramil\Desktop\DiplomJob\RestApiNETCore\DiplomApi\bin\Debug\netcoreapp2.1\DiplomApi.pdb
+C:\Users\Ramil\Desktop\DiplomJob\RestApiNETCore\DiplomApi\obj\Debug\netcoreapp2.1\DiplomApi.csprojAssemblyReference.cache
+C:\Users\Ramil\Desktop\DiplomJob\RestApiNETCore\DiplomApi\obj\Debug\netcoreapp2.1\DiplomApi.csproj.CoreCompileInputs.cache
+C:\Users\Ramil\Desktop\DiplomJob\RestApiNETCore\DiplomApi\obj\Debug\netcoreapp2.1\DiplomApi.RazorAssemblyInfo.cache
+C:\Users\Ramil\Desktop\DiplomJob\RestApiNETCore\DiplomApi\obj\Debug\netcoreapp2.1\DiplomApi.RazorAssemblyInfo.cs
+C:\Users\Ramil\Desktop\DiplomJob\RestApiNETCore\DiplomApi\obj\Debug\netcoreapp2.1\DiplomApi.AssemblyInfoInputs.cache
+C:\Users\Ramil\Desktop\DiplomJob\RestApiNETCore\DiplomApi\obj\Debug\netcoreapp2.1\DiplomApi.AssemblyInfo.cs
+C:\Users\Ramil\Desktop\DiplomJob\RestApiNETCore\DiplomApi\obj\Debug\netcoreapp2.1\DiplomApi.RazorTargetAssemblyInfo.cache
+C:\Users\Ramil\Desktop\DiplomJob\RestApiNETCore\DiplomApi\obj\Debug\netcoreapp2.1\DiplomApi.dll
+C:\Users\Ramil\Desktop\DiplomJob\RestApiNETCore\DiplomApi\obj\Debug\netcoreapp2.1\DiplomApi.pdb
