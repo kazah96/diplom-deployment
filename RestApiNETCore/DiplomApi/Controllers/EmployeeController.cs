@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Cors;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Models;
@@ -22,12 +23,14 @@
 
         [HttpGet]
         [Route("{id}")]
+        [EnableCors("MyPolicy")]
         public async Task<Employee> GetByID(int id)
         {
             return await _employeeRepo.GetByID(id);
         }
 
         [HttpGet]
+        [EnableCors("MyPolicy")]
         public async Task<IEnumerable<Employee>> GetAll (int id)
         {
             return await _employeeRepo.GetAll();
