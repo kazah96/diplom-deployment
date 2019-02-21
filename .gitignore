@@ -1,0 +1,30 @@
+# ----------------------Frontend app----------------------
+
+# dependencies
+diplom-react-app/node_modules
+diplom-react-app/.pnp
+diplom-react-app.pnp.js
+
+# testing
+diplom-react-app/coverage
+
+# production
+diplom-react-app/build
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+
+# ----------------------Backend app----------------------
+# temporary files
+RestApiNETCore/DiplomApi/bin
+# compilation result
+RestApiNETCore/DiplomApi/obj
