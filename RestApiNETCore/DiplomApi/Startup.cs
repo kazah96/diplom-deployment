@@ -27,6 +27,9 @@
                        .AllowAnyHeader();
             }));
 
+            //Сервис для документов
+            services.AddTransient<IDocumentRepository, DocumentRepository>();
+            //Сервис для работников
             services.AddTransient<IEmployeeRepository, EmployeeRepository>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

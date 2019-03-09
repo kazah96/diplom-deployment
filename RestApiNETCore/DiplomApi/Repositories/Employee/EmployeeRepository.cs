@@ -10,6 +10,9 @@
     using Models;
     using Interfaces;
 
+    /// <summary>
+    /// Репозиторий для работы с Employee.
+    /// </summary>
     public class EmployeeRepository : IEmployeeRepository
     {
         private readonly IConfiguration _config;
@@ -23,29 +26,35 @@
         {
             get
             {
-                return new SqlConnection("Server=DESKTOP-Q31V8AK;Database=Log;User Id=RamilLog; Password=2384548a;");
+                return new SqlConnection("Server=DESKTOP-Q31V8AK;Database=DiplomDatabase;Trusted_Connection=True;");
             }
         }
 
-        public async Task<Employee> GetByID(int id)
+        /// <summary>
+        /// Получение сотрудников по id.
+        /// </summary>
+        /// <param name="employeeId">ID сотрудника</param>
+        /// <returns></returns>
+        public async Task<Employee> GetByID(int employeeId)
         {
             using (IDbConnection conn = Connection)
             {
-                string sQuery = "SELECT ID, FirstName, LastName FROM Employee WHERE ID = @ID";
-                conn.Open();
-                IEnumerable<Employee> result = await conn.QueryAsync<Employee>(sQuery, new { ID = id });
+                string sQuery = "SELECT EmployeeID, Name, Surname FROM Employee WHERE EmployeeID = @EmployeeID";
+                IEnumerable<Employee> result = await conn.QueryAsync<Employee>(sQuery, new { EmployeeId = employeeId });
                 return result.FirstOrDefault();
             }
         }
 
+        /// <summary>
+        /// Получеине всех сотрудников.
+        /// </summary>
+        /// <returns></returns>
         public async Task<IEnumerable<Employee>> GetAll()
         {
             using (IDbConnection conn = Connection)
             {
                 string sQuery = "SELECT * FROM Employee";
-                conn.Open();
                 IEnumerable<Employee> result = await conn.QueryAsync<Employee>(sQuery);
-                result.Append(new Employee { FirstName = "SEX" });
                 return result;
             }
         }
