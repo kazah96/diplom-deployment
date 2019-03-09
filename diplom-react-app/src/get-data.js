@@ -11,7 +11,7 @@ class GetData extends Component {
     }
   
     componentDidMount(){
-        fetch('https://localhost:5001/api/Employee')
+        fetch('https://localhost:5001/api/Document')
             .then(res => res.json())
             .then(json => {
                 this.setState({
