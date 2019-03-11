@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class GetData extends Component {
+class GetDocument extends Component {
 
     constructor(props){
         super(props);
@@ -27,17 +27,16 @@ class GetData extends Component {
         if(!isLoaded){
             return <div>Loading...</div>;
         }
-
         return (
-            <ul>
-            {items.map(item => (
-                <li key ={item.id}>
-                    {JSON.stringify(item)}
-                </li>
-            ))}
+            <ul className="list-group" key = {items}>
+                {items.map(item => (
+                    <li className="list-group-item" key ={item.documentId}>
+                        {JSON.stringify(item)}
+                    </li>
+                ))}
             </ul>
         );
     }
 }
 
-export default GetData;
+export default GetDocument;
