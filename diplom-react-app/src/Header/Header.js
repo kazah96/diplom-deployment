@@ -4,22 +4,23 @@ import MenuItem from '../Forms/MenuItem';
 
 class Header extends Component {
 	constructor() {
-		super();
 
+		super();
+		
 		this.state = { 
 			open: false,
 			isMouseInside: false,
-			name : null
+			menuItemElement : null
 		};
 	}
 
 	updateData = (value) => {
-		this.setState({ name: value })
+		this.setState({ menuItemElement: value })
 	 }
 	
 	toggle() {
 		this.setState({
-		open: !this.state.open
+			open: !this.state.open
 		});
 	}
 	
@@ -34,7 +35,7 @@ class Header extends Component {
 								<button 
 									className="navbar-toggler" 
 									type="button" 
-									onClick={this.toggle.bind(this)} 
+									onClick={ this.toggle.bind(this) } 
 									data-toggle="collapse" 
 									data-target="#navbarText" 
 									aria-controls="navbarText" 
@@ -53,18 +54,17 @@ class Header extends Component {
 				</div>
 				{this.state.open 
 					? <div className="list-group">
-							<MenuItem name = 'Добавить документ' clickID = 'addDocument' updateData={this.updateData}/>
-							<MenuItem name = 'Удалить документ' clickID = 'deleteDocument' updateData={this.updateData}/>
-							<MenuItem name = 'Редактировать документ' clickID = 'editDocument' updateData={this.updateData}/>
-							<MenuItem name = 'Просмотреть список документов' clickID = 'showListDocument' updateData={this.updateData}/>
-						</div>
+						<MenuItem name = 'Добавить документ' clickID = 'addDocument' updateData={ this.updateData }/>
+						<MenuItem name = 'Удалить документ' clickID = 'deleteDocument' updateData={ this.updateData }/>
+						<MenuItem name = 'Редактировать документ' clickID = 'editDocument' updateData={ this.updateData }/>
+						<MenuItem name = 'Просмотреть список документов' clickID = 'showListDocument' updateData={ this.updateData }/>
+					</div>
 					: null
 				}
-				{this.state.name}
+				{this.state.menuItemElement}
 			</div>
 		);
 	}
 };
-	
 
 export default Header;

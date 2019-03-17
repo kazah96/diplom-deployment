@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import AddDocument from '../Document/AddDocument';
 import GetDocument from '../Document/GetDocument';
 
@@ -7,8 +8,7 @@ class MenuItem extends Component {
 		super();
 
 		this.state = { 
-			isToggleOn: true,
-			result: null
+			isToggleOn: true
 		};
 		this.handleClick = this.handleClick.bind(this);
 	}
@@ -35,24 +35,27 @@ class MenuItem extends Component {
 		this.setState(state => ({
 		  isToggleOn: !state.isToggleOn
 		}));
-	  }
+	}
 	
 	render() {
 		return (
 			<div>
-                <button 
-                    type="button"
-					className={this.state.isMouseInside ? 'list-group-item list-group-item-action active' : 'list-group-item list-group-item-action'}
-					onClick={this.handleClick}
+				<button 
+					type="button"
+					className={ this.state.isMouseInside ? 'list-group-item list-group-item-action active' : 'list-group-item list-group-item-action' }
+					onClick={ this.handleClick }
 				>
-					{this.props.name}
+					{ this.props.name }
 				</button>
-				<div>
-					{this.state.result}
-				</div>
 			</div>
 		);
 	}
-};	
+};
+
+MenuItem.propTypes = {
+	clickID: PropTypes.string,
+	name: PropTypes.string,
+	updateData : PropTypes.func
+};
 
 export default MenuItem;
