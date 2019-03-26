@@ -24,10 +24,9 @@ class GetDocument extends Component {
 		if (!isLoaded) {
 			return <div>Loading...</div>;
 		}
-		console.warn(JSON.stringify(items));
 
 		return (
-			<div class="container">
+			<div className="container">
 				<BootstrapTable 
 					data={ items }  
 					pagination 
