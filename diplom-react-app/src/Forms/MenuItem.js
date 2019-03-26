@@ -10,10 +10,10 @@ class MenuItem extends Component {
 		this.state = { 
 			isToggleOn: true
 		};
-		this.handleClick = this.handleClick.bind(this);
+		this.menuItemClick = this.menuItemClick.bind(this);
 	}
 	
-	handleClick() {
+	menuItemClick() {
 		
 		if(this.state.isToggleOn){
 			if(this.props.clickID === 'addDocument'){
@@ -43,7 +43,7 @@ class MenuItem extends Component {
 				<button 
 					type="button"
 					className={ this.state.isMouseInside ? 'list-group-item list-group-item-action active' : 'list-group-item list-group-item-action' }
-					onClick={ this.handleClick }
+					onClick={ this.menuItemClick }
 				>
 					{ this.props.name }
 				</button>
