@@ -6,17 +6,20 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
 
 class App extends Component {
-
 	constructor() {
 		super();
 
 		this.state = {
-			logIn: false
+			logIn: false,
+			userInfo: {}
 		};
 	}
 
 	updateData = (value) => {
-		this.setState({ logIn: value })
+		this.setState({ 
+			logIn: value.logIn, 
+			userInfo: value.userInfo 
+		})
 	}
 
 	render() {
@@ -24,7 +27,7 @@ class App extends Component {
 			<div className="App">
 				{
 					this.state.logIn 
-						? <Header/> 
+						? <Header userInfo={ this.state.userInfo }/> 
 						: <Login  updateData={ this.updateData }/>
 				}
 			</div>

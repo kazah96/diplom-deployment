@@ -1,18 +1,31 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import InputForm from './InputForm';
+import SelectionForm from './SelectionForm';
+import AddEmployeeRequest from '../Requests/AddEmployeeRequest';
 
 class Registration extends Component {
 	constructor(props) {
 		super(props);
 
-		this.state = { 
-			inputFormValue: '',
+		this.state = {
 			validInputForms: {
-				'userNameRegistration' : false,
-				'emailRegistration' : false,
-				'passwordRegistrationOne' : false,
-				'passwordRegistrationTwo' : false
+				'employeeNameRegistration': false,
+				'employeeFNameRegistration': false,
+				'emailRegistration': false,
+				'passwordRegistrationOne': false,
+				'passwordRegistrationTwo': false,
+				'positionRegistration': false,
+				'subdivisionRegistration': false
+			},
+			inputFormValues: {
+				'employeeNameRegistration': '',
+				'employeeFNameRegistration': '',
+				'emailRegistration': '',
+				'passwordRegistrationOne': '',
+				'passwordRegistrationTwo': '',
+				'positionRegistration': '',
+				'subdivisionRegistration': ''
 			},
 			allFormsValid: false
 		};
@@ -29,8 +42,16 @@ class Registration extends Component {
 		this.props.updateData({ registrationClick: false, areadyRegistrationClick: false });
 	}
 
-	inputFormValue = (value) => {
-		this.setState({ inputFormValue: value })
+	inputFormValues = (value) => {
+		const inputFormsObj= this.state.inputFormValues;
+
+		Object.keys(inputFormsObj).forEach(key => {
+			if (key === value.id){
+				inputFormsObj[ key ] = value.result;
+			}
+		})
+		
+		this.setState({ inputFormValues: inputFormsObj })
 	}
 
 	validInputForm = (value) => {
@@ -39,8 +60,8 @@ class Registration extends Component {
 		let validFlag = true;
 
 		Object.keys(inputFormsObj).forEach(key => {
-			if (key === value[ 0 ]){
-				inputFormsObj[ key ] = value[ 1 ];
+			if (key === value.id){
+				inputFormsObj[ key ] = value.result;
 			}
 			if(!inputFormsObj[ key ]){
 				validFlag = false;
@@ -52,8 +73,9 @@ class Registration extends Component {
 
 	regClick() {
 		if(this.state.allFormsValid){ 
+			AddEmployeeRequest(this.state.inputFormValues);
 			this.registrationClick()
-		}else{			
+		}else {
 			alert('Все поля должны быть верно заполнены')
 		}
 	}
@@ -64,11 +86,35 @@ class Registration extends Component {
 				<p className="h4 mb-4">Регистрация</p>
 				<InputForm 
 					type="text"
-					id="userNameRegistration" 
-					placeholder="Имя пользователя" 
-					idHelp="userNamelHelp"
-					textHelp="Логин должен быть от 5 до 15 латинских символов и не содержать специальных символов"
+					id="employeeNameRegistration" 
+					placeholder="Имя сотрудника" 
+					idHelp="employeeNameHelp"
+					textHelp="Поле не должно быть пустым"
+					inputFormValues={ this.inputFormValues }
 					validInputForm={ this.validInputForm }
+				/>
+				<InputForm 
+					type="text"
+					id="employeeFNameRegistration" 
+					placeholder="Фамилия сотрудника"
+					idHelp="employeeFNameHelp"
+					textHelp="Поле не должно быть пустым"
+					inputFormValues={ this.inputFormValues }
+					validInputForm={ this.validInputForm }
+				/>
+				<SelectionForm 
+					id="positionRegistration" 
+					placeholder="Выберете должность" 
+					inputFormValues={ this.inputFormValues }
+					validInputForm={ this.validInputForm }
+					textHelp="Обязательно выберете должность"
+				/>
+				<SelectionForm 
+					id="subdivisionRegistration" 
+					placeholder="Выберете подразделение" 
+					inputFormValues={ this.inputFormValues }
+					validInputForm={ this.validInputForm }
+					textHelp="Обязательно выберете подразделение"
 				/>
 				<InputForm 
 					type="email"
@@ -76,6 +122,7 @@ class Registration extends Component {
 					placeholder="E-mail" 
 					idHelp="emailHelp"
 					textHelp="Некорректный Email"
+					inputFormValues={ this.inputFormValues }
 					validInputForm={ this.validInputForm }
 				/>
 				<InputForm 
@@ -84,7 +131,7 @@ class Registration extends Component {
 					placeholder="Пароль" 
 					idHelp="passwordHelpOne"
 					textHelp="Пароль должен быть длиннее 6 символов и иметь: заглавную и строчную буквы, цифру, специальный символ"
-					inputFormValue={ this.inputFormValue }
+					inputFormValues={ this.inputFormValues }
 					validInputForm={ this.validInputForm }
 				/>
 				<InputForm 
@@ -93,7 +140,8 @@ class Registration extends Component {
 					placeholder="Подтвердите пароль" 
 					idHelp="passwordHelpTwo"
 					textHelp="Пароли должны совпадать"
-					passwordOne={ this.state.inputFormValue }
+					inputFormValues={ this.inputFormValues }
+					passwordOne={ this.state.inputFormValues.passwordRegistrationOne }
 					validInputForm={ this.validInputForm }
 				/>
 				<div className="d-flex justify-content-around"/>

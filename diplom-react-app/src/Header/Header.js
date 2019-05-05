@@ -1,17 +1,23 @@
 import React, { Component } from 'react';
 import './index.css'
+import PropTypes from 'prop-types';
 import MenuItem from '../Forms/MenuItem';
+import UserMenu from './UserMenu';
 
 class Header extends Component {
 	constructor() {
-
 		super();
 		
 		this.state = { 
 			open: false,
 			isMouseInside: false,
-			menuItemElement : null
+			menuItemElement: null,
+			userInfo: {}
 		};
+	}
+
+	componentWillMount(){
+		this.setState({ userInfo: this.props.userInfo });
 	}
 
 	updateData = (value) => {
@@ -48,23 +54,34 @@ class Header extends Component {
 							<div id="navbarText">
 								<h3 className="text-center">DocFlow</h3>
 							</div>
-							<button type="button" className="btn btn-primary">Пользователь</button>
+							<UserMenu userInfo={ this.state.userInfo }/>
 						</nav>
 					</header>
 				</div>
-				{this.state.open 
-					? <div className="list-group">
-						<MenuItem name = 'Добавить документ' clickID = 'addDocument' updateData={ this.updateData }/>
-						<MenuItem name = 'Удалить документ' clickID = 'deleteDocument' updateData={ this.updateData }/>
-						<MenuItem name = 'Редактировать документ' clickID = 'editDocument' updateData={ this.updateData }/>
-						<MenuItem name = 'Просмотреть список документов' clickID = 'showListDocument' updateData={ this.updateData }/>
-					</div>
-					: null
+				{
+					this.state.open 
+						? <div className="list-group">
+							<MenuItem name = 'Добавить документ' clickID = 'addDocument' updateData={ this.updateData }/>
+							<MenuItem name = 'Редактировать документ' clickID = 'editDocument' updateData={ this.updateData }/>
+							<MenuItem name = 'Просмотреть список документов' clickID = 'showListDocument' updateData={ this.updateData }/>
+							<MenuItem name = 'Отправить документ на согласование' clickID = 'showListDocument' updateData={ this.updateData }/>
+							<MenuItem name = 'Согласовать документ' clickID = 'showListDocument' updateData={ this.updateData }/>
+							<MenuItem name = 'Результаты мониторинга' clickID = 'showListDocument' updateData={ this.updateData }/>
+						</div>
+						: null
 				}
-				{this.state.menuItemElement}
+				{ this.state.menuItemElement }
 			</div>
 		);
 	}
+};
+
+Header.propTypes = {
+	userInfo: PropTypes.object,
+};
+
+Header.defaultProps = {
+	userInfo: {}
 };
 
 export default Header;

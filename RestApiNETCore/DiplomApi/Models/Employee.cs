@@ -19,6 +19,7 @@ namespace DiplomApi.Models
         public int PositionId { get; set; }
         public int SubdivisionId { get; set; }
         public int CompanyId { get; set; }
+        public string Password { get; set; }
 
         public Company Company { get; set; }
         public Position Position { get; set; }

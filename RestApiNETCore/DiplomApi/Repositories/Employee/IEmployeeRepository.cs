@@ -1,4 +1,4 @@
-﻿namespace DiplomApi.Repositories.Interfaces
+﻿namespace DiplomApi.Repositories.Employee
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
@@ -11,5 +11,6 @@
     {
         Task<Employee> GetByID(int id);
         Task<IEnumerable<Employee>> GetAll();
+        Task AddEmployee(Employee employee);
     }
 }

@@ -1,12 +1,11 @@
 ﻿namespace DiplomApi
 {
-    using DiplomApi.Repositories;
-    using DiplomApi.Repositories.Interfaces;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Repo = Repositories;
 
     public class Startup
     {
@@ -28,9 +27,16 @@
             }));
 
             //Сервис для документов
-            services.AddTransient<IDocumentRepository, DocumentRepository>();
+            services.AddTransient<Repo.Document.IDocumentRepository, Repo.Document.DocumentRepository>();
             //Сервис для работников
-            services.AddTransient<IEmployeeRepository, EmployeeRepository>();
+            services.AddTransient<Repo.Employee.IEmployeeRepository, Repo.Employee.EmployeeRepository>();
+            //Сервис для позиций
+            services.AddTransient<Repo.Position.IPositionRepository, Repo.Position.PositionRepository>();
+            //Сервис для подразделений
+            services.AddTransient<Repo.Subdivision.ISubdivisionRepository, Repo.Subdivision.SubdivisionRepository>();
+            //Сервис для авторизации
+            services.AddTransient<Repo.AuthorizInfo.IAuthorizInfoRepository, Repo.AuthorizInfo.AuthorizInfoRepository>();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
