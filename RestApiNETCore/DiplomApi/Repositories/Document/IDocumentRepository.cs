@@ -1,4 +1,4 @@
-﻿namespace DiplomApi.Repositories.Interfaces
+﻿namespace DiplomApi.Repositories.Document
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;

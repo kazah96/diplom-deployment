@@ -14,7 +14,6 @@ class MenuItem extends Component {
 	}
 	
 	menuItemClick() {
-		
 		if(this.state.isToggleOn){
 			if(this.props.clickID === 'addDocument'){
 				this.props.updateData(<AddDocument/>);

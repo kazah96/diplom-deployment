@@ -1,14 +1,11 @@
 ﻿namespace DiplomApi.Controllers
 {
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Cors;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Models;
-    using Repositories.Interfaces;
+    using DiplomApi.Repositories.Employee;
 
     [Route("api/[controller]")]
     [ApiController]
@@ -34,6 +31,13 @@
         public async Task<IEnumerable<Employee>> GetAll (int id)
         {
             return await _employeeRepo.GetAll();
+        }
+
+        [HttpPost]
+        [EnableCors("MyPolicy")]
+        public async Task Post(Employee employee)
+        {
+            await _employeeRepo.AddEmployee(employee);
         }
     }
 }

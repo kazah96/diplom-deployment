@@ -14,6 +14,11 @@ class InputForm extends Component {
 		let result = false;
 		const id = this.props.id;
 
+		this.props.inputFormValues({ id: id, result: event.target.value });
+
+		if(id === 'employeeNameRegistration' || id === 'employeeFNameRegistration'){
+			result = event.target.value !== '';
+		}
 		if(id === 'userNameRegistration'){
 			result =  validateLogin(event.target.value);
 		}   
@@ -21,10 +26,9 @@ class InputForm extends Component {
 			result = validateEmail(event.target.value);
 		}
 		if(id === 'passwordRegistrationOne'){
-			result = validatePassword(event.target.value);
-			this.props.inputFormValue(event.target.value);
+			result = validatePassword(event.target.value);		
 		}
-		if(id === 'passwordRegistrationTwo'){  
+		if(id === 'passwordRegistrationTwo'){
 			result = comparePasswords(this.props.passwordOne, event.target.value);
 		}
 
@@ -34,7 +38,7 @@ class InputForm extends Component {
 			this.setState({ validForm: false });
 		}
 		
-		this.props.validInputForm([ id, result ]);
+		this.props.validInputForm({ id: id, result: result });
 	}
 
 	render() {
@@ -68,9 +72,14 @@ InputForm.propTypes = {
 	placeholder: PropTypes.string,
 	idHelp: PropTypes.string,
 	textHelp: PropTypes.string,
-	inputFormValue: PropTypes.func,
+	inputFormValues: PropTypes.func,
 	passwordOne: PropTypes.string,
 	validInputForm: PropTypes.func
+};
+
+InputForm.defaultProps = {
+	idHelp: '',
+	textHelp: ''
 };
 
 function validateLogin(login) {

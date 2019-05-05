@@ -15,6 +15,7 @@ namespace DiplomApi.Models
         {
         }
 
+        public virtual DbSet<AccessLevel> AccessLevel { get; set; }
         public virtual DbSet<Action> Action { get; set; }
         public virtual DbSet<Company> Company { get; set; }
         public virtual DbSet<Document> Document { get; set; }
@@ -39,6 +40,17 @@ namespace DiplomApi.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<AccessLevel>(entity =>
+            {
+                entity.Property(e => e.AccessLevelId)
+                    .HasColumnName("AccessLevelID")
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.AccessName)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
             modelBuilder.Entity<Action>(entity =>
             {
                 entity.Property(e => e.ActionId).HasColumnName("ActionID");
@@ -179,6 +191,11 @@ namespace DiplomApi.Models
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
+                entity.Property(e => e.Password)
+                    .IsRequired()
+                    .HasMaxLength(32)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.PositionId).HasColumnName("PositionID");
 
                 entity.Property(e => e.SubdivisionId).HasColumnName("SubdivisionID");
@@ -261,6 +278,8 @@ namespace DiplomApi.Models
             {
                 entity.Property(e => e.PositionId).HasColumnName("PositionID");
 
+                entity.Property(e => e.AccessLevelId).HasColumnName("AccessLevelID");
+
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(200)
@@ -269,6 +288,11 @@ namespace DiplomApi.Models
                 entity.Property(e => e.ShortDescription)
                     .HasMaxLength(250)
                     .IsUnicode(false);
+
+                entity.HasOne(d => d.AccessLevel)
+                    .WithMany(p => p.Position)
+                    .HasForeignKey(d => d.AccessLevelId)
+                    .HasConstraintName("FK_Position_AccessLevel");
             });
 
             modelBuilder.Entity<RoutePoint>(entity =>

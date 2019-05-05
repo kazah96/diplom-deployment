@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Registration from './Registration'
+import Registration from './Registration';
+import GetUserAuthorizRequest from '../Requests/GetUserAuthorizRequest';
 
 class Login extends Component {
 	constructor() {
@@ -8,18 +9,29 @@ class Login extends Component {
 
 		this.state = { 
 			clickedButton: false,
-			registrationMode: false
+			registrationMode: false,			
+			inputFormValues: {
+				'emailLogin': '',
+				'passwordLogin': ''
+			},
 		};
+
 		this.enterClick = this.enterClick.bind(this);
 		this.registrationClick = this.registrationClick.bind(this);
 	}
 
 	enterClick() {
-		this.props.updateData(true);
+		GetUserAuthorizRequest(this.state.inputFormValues.emailLogin, this.state.inputFormValues.passwordLogin)
+			.then(result => {
+				if(!result){
+					alert('Неверный логин или пароль');
+				}else{
+					this.props.updateData({ logIn: true, userInfo: result });
+				}
+			});
 	}
 
-	registrationClick() {
-		
+	registrationClick() {		
 		this.setState({ registrationMode: true });
 	}
 
@@ -28,28 +40,41 @@ class Login extends Component {
 		this.props.updateData(value.registrationClick);
 	}
 
+	inputFormValues = (value) => {
+		const inputFormsObj= this.state.inputFormValues;
+
+		Object.keys(inputFormsObj).forEach(key => {
+			if (key === value.target.id){
+				inputFormsObj[ key ] = value.target.value;
+			}
+		})
+		
+		this.setState({ inputFormValues: inputFormsObj })
+	}
+
 	render() {
 		return(
 			<div className = "container">
-				{this.state.registrationMode 
-					? < Registration updateData={ this.updateData }/> 
-					: <form className="text-center border border-light p-5">
-						<p className="h4 mb-4">Авторизация</p>
-						<input type="email" id="emailLogin" className="form-control mb-4" autoComplete="on" placeholder="E-mail"/>
-						<input type="password" id="passwordLogin" className="form-control mb-4" autoComplete="on" placeholder="Пароль"/>
-						<div className="d-flex justify-content-around">
-							<div>
-								<div className="custom-control custom-checkbox">
-									<input type="checkbox" className="custom-control-input" id="defaultLoginFormRemember"/>
-									<label className="custom-control-label" htmlFor="defaultLoginFormRemember">Запомнить меня</label>
+				{
+					this.state.registrationMode 
+						? < Registration updateData={ this.updateData }/> 
+						: <form className="text-center border border-light p-5">
+							<p className="h4 mb-4">Авторизация</p>
+							<input type="email" id="emailLogin" className="form-control mb-4" autoComplete="on" placeholder="E-mail" onChange = { this.inputFormValues }/>
+							<input type="password" id="passwordLogin" className="form-control mb-4" autoComplete="on" placeholder="Пароль" onChange = { this.inputFormValues }/>
+							<div className="d-flex justify-content-around">
+								<div>
+									<div className="custom-control custom-checkbox">
+										<input type="checkbox" className="custom-control-input" id="defaultLoginFormRemember"/>
+										<label className="custom-control-label" htmlFor="defaultLoginFormRemember">Запомнить меня</label>
+									</div>
 								</div>
 							</div>
-						</div>
-						<button className="btn btn-info btn-block my-4" type="button" onClick={ this.enterClick } >Вход</button>
-						<p>Не зарегистрированы?
-							<button type="button" className="btn btn-link" onClick={ this.registrationClick } >Регистрация</button>
-						</p>
-					</form>
+							<button className="btn btn-info btn-block my-4" type="button" onClick={ this.enterClick } >Вход</button>
+							<p>Не зарегистрированы?
+								<button type="button" className="btn btn-link" onClick={ this.registrationClick } >Регистрация</button>
+							</p>
+						</form>
 				}
 			</div>
 		);

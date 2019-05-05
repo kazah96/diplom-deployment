@@ -1,4 +1,4 @@
-﻿namespace DiplomApi.Repositories
+﻿namespace DiplomApi.Repositories.Employee
 {
     using System.Collections.Generic;
     using System.Data;
@@ -8,7 +8,6 @@
     using Microsoft.Extensions.Configuration;
     using Dapper;
     using Models;
-    using Interfaces;
 
     /// <summary>
     /// Репозиторий для работы с Employee.
@@ -56,6 +55,32 @@
                 string sQuery = "SELECT * FROM Employee";
                 IEnumerable<Employee> result = await conn.QueryAsync<Employee>(sQuery);
                 return result;
+            }
+        }
+
+        /// <summary>
+        /// Добавление документа.
+        /// </summary>
+        /// <param name="employee">Документ для добавления</param>
+        /// <returns></returns>
+        public async Task AddEmployee(Employee employee)
+        {
+            using (IDbConnection conn = Connection)
+            {
+                string sQuery = @"INSERT INTO Employee(Name, Surname, MiddleName, TelephoneNumber, Email, PositionId, SubdivisionId, CompanyId, Password) VALUES (@Name, @Surname, @MiddleName, @TelephoneNumber, @Email, @PositionId, @SubdivisionId, @CompanyId, @Password)";
+                var result = await conn.ExecuteAsync(sQuery,
+                    new Employee
+                    {
+                        Name = employee.Name,
+                        Surname = employee.Surname,
+                        MiddleName = employee.MiddleName,
+                        TelephoneNumber = employee.TelephoneNumber,
+                        Email = employee.Email,
+                        PositionId = employee.PositionId,
+                        SubdivisionId = employee.SubdivisionId,
+                        CompanyId = employee.CompanyId,
+                        Password = employee.Password
+                    });
             }
         }
     }

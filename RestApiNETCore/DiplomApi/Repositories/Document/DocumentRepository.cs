@@ -1,4 +1,4 @@
-﻿namespace DiplomApi.Repositories
+﻿namespace DiplomApi.Repositories.Document
 {
     using System.Collections.Generic;
     using System.Data;
@@ -8,7 +8,6 @@
     using Microsoft.Extensions.Configuration;
     using Dapper;
     using Models;
-    using Interfaces;
 
     /// <summary>
     /// Репозиторий для работы с Document.
