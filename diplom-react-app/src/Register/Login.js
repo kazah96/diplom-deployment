@@ -19,9 +19,10 @@ class Login extends Component {
 		this.enterClick = this.enterClick.bind(this);
 		this.registrationClick = this.registrationClick.bind(this);
 	}
+	//В первый аргумент функции прилетает что-то непонятное.
+	enterClick(a, emailLogin = this.state.inputFormValues.emailLogin, passwordLogin = this.state.inputFormValues.passwordLogin) {
 
-	enterClick() {
-		GetUserAuthorizRequest(this.state.inputFormValues.emailLogin, this.state.inputFormValues.passwordLogin)
+		GetUserAuthorizRequest(emailLogin, passwordLogin)
 			.then(result => {
 				if(!result){
 					alert('Неверный логин или пароль');
@@ -31,13 +32,17 @@ class Login extends Component {
 			});
 	}
 
-	registrationClick() {		
+	registrationClick() {
 		this.setState({ registrationMode: true });
 	}
 
 	updateData = (value) => {
-		this.setState({ registrationMode: value.areadyRegistrationClick })
+		this.setState({ registrationMode: value.areadyRegistrationClick });
 		this.props.updateData(value.registrationClick);
+
+		if(value.loginInformation){
+			this.enterClick('', value.loginInformation.login, value.loginInformation.password);
+		}
 	}
 
 	inputFormValues = (value) => {

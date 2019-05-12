@@ -8,6 +8,7 @@
     using Microsoft.Extensions.Configuration;
     using Dapper;
     using Models;
+    using DevOne.Security.Cryptography.BCrypt;
 
     /// <summary>
     /// Репозиторий для работы с Employee.
@@ -59,12 +60,15 @@
         }
 
         /// <summary>
-        /// Добавление документа.
+        /// Добавление работника.
         /// </summary>
-        /// <param name="employee">Документ для добавления</param>
+        /// <param name="employee">Работник для добавления</param>
         /// <returns></returns>
         public async Task AddEmployee(Employee employee)
         {
+            string randomSalt = BCryptHelper.GenerateSalt(6);
+            string hashPassword = BCryptHelper.HashPassword(employee.Password, randomSalt);
+
             using (IDbConnection conn = Connection)
             {
                 string sQuery = @"INSERT INTO Employee(Name, Surname, MiddleName, TelephoneNumber, Email, PositionId, SubdivisionId, CompanyId, Password) VALUES (@Name, @Surname, @MiddleName, @TelephoneNumber, @Email, @PositionId, @SubdivisionId, @CompanyId, @Password)";
@@ -79,7 +83,7 @@
                         PositionId = employee.PositionId,
                         SubdivisionId = employee.SubdivisionId,
                         CompanyId = employee.CompanyId,
-                        Password = employee.Password
+                        Password = hashPassword
                     });
             }
         }

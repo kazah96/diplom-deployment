@@ -12,7 +12,8 @@ class Header extends Component {
 			open: false,
 			isMouseInside: false,
 			menuItemElement: null,
-			userInfo: {}
+			userInfo: {},
+			userLogin: true
 		};
 	}
 
@@ -23,6 +24,10 @@ class Header extends Component {
 	updateData = (value) => {
 		this.setState({ menuItemElement: value })
 	 }
+
+	userMenuUpdateData = (value) => {
+		this.props.headerUpdateData({ userLogin: value.userLogin })
+	}
 	
 	toggle() {
 		this.setState({
@@ -54,7 +59,7 @@ class Header extends Component {
 							<div id="navbarText">
 								<h3 className="text-center">DocFlow</h3>
 							</div>
-							<UserMenu userInfo={ this.state.userInfo }/>
+							<UserMenu userInfo={ this.state.userInfo } userMenuUpdateData={ this.userMenuUpdateData }/>
 						</nav>
 					</header>
 				</div>
@@ -78,6 +83,7 @@ class Header extends Component {
 
 Header.propTypes = {
 	userInfo: PropTypes.object,
+	headerUpdateData: PropTypes.func
 };
 
 Header.defaultProps = {

@@ -22,12 +22,16 @@ class App extends Component {
 		})
 	}
 
+	headerUpdateData = (value) => {
+		this.setState({ logIn: value.userLogin });
+	}
+
 	render() {
 		return(
 			<div className="App">
 				{
 					this.state.logIn 
-						? <Header userInfo={ this.state.userInfo }/> 
+						? <Header userInfo={ this.state.userInfo } headerUpdateData={ this.headerUpdateData }/> 
 						: <Login  updateData={ this.updateData }/>
 				}
 			</div>
