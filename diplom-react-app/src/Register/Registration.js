@@ -35,7 +35,14 @@ class Registration extends Component {
 	}
   
 	registrationClick() {
-		this.props.updateData({ registrationClick: true, areadyRegistrationClick: true });
+		this.props.updateData({ 
+			registrationClick: true, 
+			areadyRegistrationClick: true, 
+			loginInformation: { 
+				login: this.state.inputFormValues.emailRegistration, 
+				password: this.state.inputFormValues.passwordRegistrationOne 
+			} 
+		});
 	}
 
 	areadyRegistrationClick() {
@@ -46,11 +53,12 @@ class Registration extends Component {
 		const inputFormsObj= this.state.inputFormValues;
 
 		Object.keys(inputFormsObj).forEach(key => {
-			if (key === value.id){
+			if ((value.id === 'positionRegistration' && key === value.id) || (value.id === 'subdivisionRegistration' && key === value.id)){
+				inputFormsObj[ key ] = value.resultId;
+			} else if (key === value.id) {
 				inputFormsObj[ key ] = value.result;
 			}
 		})
-		
 		this.setState({ inputFormValues: inputFormsObj })
 	}
 
@@ -73,8 +81,12 @@ class Registration extends Component {
 
 	regClick() {
 		if(this.state.allFormsValid){ 
-			AddEmployeeRequest(this.state.inputFormValues);
-			this.registrationClick()
+			AddEmployeeRequest(this.state.inputFormValues).then(result => {
+				if(result.status === 200){
+					alert('Успешная регистрация!')
+					this.registrationClick()
+				}				
+			}).catch(() => alert('Внимание! Произошла ошибка!'))
 		}else {
 			alert('Все поля должны быть верно заполнены')
 		}

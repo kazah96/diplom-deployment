@@ -23,7 +23,7 @@ class SelectionForm extends Component {
 					validForm: true,
 					items: items.map(item => {
 						if(firstElementFlag){
-							this.props.inputFormValues({ id: id, result: item.shortDescription });
+							this.props.inputFormValues({ id: id, result: item.shortDescription, resultId: item.positionId });
 							firstElementFlag = false;
 						}
 						this.props.validInputForm({ id: id, result: true });
@@ -39,7 +39,7 @@ class SelectionForm extends Component {
 					validForm: true,
 					items: items.map(item => {
 						if(firstElementFlag){
-							this.props.inputFormValues({ id: id, result: item.name });
+							this.props.inputFormValues({ id: id, result: item.name, resultId: item.subdivisionId });
 							firstElementFlag = false;
 						}
 						this.props.validInputForm({ id: id, result: true });
@@ -53,8 +53,9 @@ class SelectionForm extends Component {
 	handleChange (event) {
 		let result = false;
 		const id = this.props.id;
+		const resultId = this.state.items.find(element => element.showName === event.target.value ).id;
 
-		this.props.inputFormValues({ id: id, result: event.target.value });
+		this.props.inputFormValues({ id: id, result: event.target.value, resultId: resultId });
 		if(id === 'positionRegistration' || id === 'subdivisionRegistration'){
 			result = event.target.value !== '';
 		}

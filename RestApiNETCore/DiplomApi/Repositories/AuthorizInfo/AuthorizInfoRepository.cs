@@ -9,6 +9,7 @@
     using Dapper;
     using Models;
     using DiplomApi.Classes;
+    using DevOne.Security.Cryptography.BCrypt;
 
     public class AuthorizInfoRepository : IAuthorizInfoRepository
     {
@@ -39,28 +40,31 @@
             {
                 string employeeStringQuery = "SELECT Name, Surname, MiddleName, TelephoneNumber, Password, Email, PositionID FROM Employee WHERE Email = @Email";
                 IEnumerable<Employee> employeeResult = await conn.QueryAsync<Employee>(employeeStringQuery, new { Email = email });
-
-                if (employeeResult.FirstOrDefault().Password == password)
+                try
                 {
-                    string positionStringQuery = "SELECT Name, ShortDescription, AccessLevelId FROM Position WHERE PositionID = @PositionID";
-                    IEnumerable<Position> positionResult = await conn.QueryAsync<Position>(positionStringQuery, new { PositionID = employeeResult.FirstOrDefault().PositionId });
-
-                    string accessLevelStringQuery = "SELECT AccessNumber, AccessName FROM AccessLevel WHERE AccessLevelID = @AccessLevelID";
-                    IEnumerable<AccessLevel> accessLevelresult = await conn.QueryAsync<AccessLevel>(accessLevelStringQuery, new { AccessLevelID = positionResult.FirstOrDefault().AccessLevelId });
-
-                    return new AuthorizInfo
+                    if (BCryptHelper.CheckPassword(password, employeeResult.FirstOrDefault().Password))
                     {
-                        Name = employeeResult.FirstOrDefault().Name,
-                        Surname = employeeResult.FirstOrDefault().Surname,
-                        MiddleName = employeeResult.FirstOrDefault().MiddleName,
-                        TelephoneNumber = employeeResult.FirstOrDefault().TelephoneNumber,
-                        Email = employeeResult.FirstOrDefault().Email,
-                        PositionName = positionResult.FirstOrDefault().Name,
-                        ShortDescriptionPositionName = positionResult.FirstOrDefault().ShortDescription,
-                        AccessName = accessLevelresult.FirstOrDefault().AccessName,
-                        AccessNumber = accessLevelresult.FirstOrDefault().AccessNumber
-                    };
+                        string positionStringQuery = "SELECT Name, ShortDescription, AccessLevelId FROM Position WHERE PositionID = @PositionID";
+                        IEnumerable<Position> positionResult = await conn.QueryAsync<Position>(positionStringQuery, new { PositionID = employeeResult.FirstOrDefault().PositionId });
+
+                        string accessLevelStringQuery = "SELECT AccessNumber, AccessName FROM AccessLevel WHERE AccessLevelID = @AccessLevelID";
+                        IEnumerable<AccessLevel> accessLevelresult = await conn.QueryAsync<AccessLevel>(accessLevelStringQuery, new { AccessLevelID = positionResult.FirstOrDefault().AccessLevelId });
+
+                        return new AuthorizInfo
+                        {
+                            Name = employeeResult.FirstOrDefault().Name,
+                            Surname = employeeResult.FirstOrDefault().Surname,
+                            MiddleName = employeeResult.FirstOrDefault().MiddleName,
+                            TelephoneNumber = employeeResult.FirstOrDefault().TelephoneNumber,
+                            Email = employeeResult.FirstOrDefault().Email,
+                            PositionName = positionResult.FirstOrDefault().Name,
+                            ShortDescriptionPositionName = positionResult.FirstOrDefault().ShortDescription,
+                            AccessName = accessLevelresult.FirstOrDefault().AccessName,
+                            AccessNumber = accessLevelresult.FirstOrDefault().AccessNumber
+                        };
+                    }
                 }
+                catch { }
 
                 return null;
             }

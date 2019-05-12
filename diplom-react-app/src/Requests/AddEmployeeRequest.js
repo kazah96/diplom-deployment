@@ -1,6 +1,5 @@
 const AddEmployeeRequest = async (e) => {
-	e.preventDefault();
-	await fetch('https://localhost:5001/api/Document', {
+	return await fetch('https://localhost:5001/api/Employee', {
 		method: 'POST',
 		headers: {
 			'Accept': 'application/json',
@@ -18,7 +17,5 @@ const AddEmployeeRequest = async (e) => {
 			password: e.passwordRegistrationOne
 		})
 	})
-		.then(()=> alert('Документ был успешно добавлен!'))
-		.catch(() => alert('Внимание! Документ не был добавлен!'))
 }
 export default AddEmployeeRequest;

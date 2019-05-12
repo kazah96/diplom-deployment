@@ -15,6 +15,10 @@ class UserMenu extends React.Component {
 		this.setState({ userInfo: this.props.userInfo });
 	}
 
+	userMenuUpdateData = () => {
+		this.props.userMenuUpdateData({ userLogin: false })
+	}
+
 	toggleOpen = () => this.setState({ isOpen: !this.state.isOpen });
 
 	render() {
@@ -37,7 +41,7 @@ class UserMenu extends React.Component {
 					<button className="dropdown-item">
 						Сменить пользователя
 					</button>
-					<button className="dropdown-item">
+					<button className="dropdown-item" onClick={ this.userMenuUpdateData }>
 						Выйти
 					</button>
 				</div>
@@ -48,6 +52,7 @@ class UserMenu extends React.Component {
 
 UserMenu.propTypes = {
 	userInfo: PropTypes.object,
+	userMenuUpdateData: PropTypes.func
 };
 
 UserMenu.defaultProps = {
