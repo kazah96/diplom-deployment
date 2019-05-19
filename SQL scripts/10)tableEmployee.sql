@@ -1,4 +1,4 @@
-USE [DiplomDatabase]
+USE [testDiplomDatabase]
 GO
 
 CREATE TABLE Employee(
@@ -6,8 +6,9 @@ CREATE TABLE Employee(
 	[Name] [varchar](100) NOT NULL,
 	[Surname] [varchar](200) NOT NULL,
 	[MiddleName] [varchar](200) NULL,
-	[TelephoneNumber] [char](12) NULL,
-	[Email] [char](70) NULL,
+	[TelephoneNumber] [varchar](25) NULL,
+	[Email] [char](70) NOT NULL,
+	[Password] [varchar](70) NOT NULL,
 	[PositionID] [int] NOT NULL,
 	[SubdivisionID] [int] NOT NULL,
 	[CompanyID] [int] NOT NULL

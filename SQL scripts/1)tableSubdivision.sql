@@ -1,4 +1,4 @@
-USE [DiplomDatabase]
+USE [testDiplomDatabase]
 GO
 
 CREATE TABLE Subdivision(
