@@ -26,7 +26,7 @@
         {
             get
             {
-                return new SqlConnection("Server=DESKTOP-Q31V8AK;Database=DiplomDatabase;Trusted_Connection=True;");
+                return new SqlConnection(MetaInfo._connectionString);
             }
         }
 

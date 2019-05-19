@@ -1,4 +1,4 @@
-USE [DiplomDatabase]
+USE [testDiplomDatabase]
 GO
 
 CREATE TABLE Document(
@@ -7,9 +7,7 @@ CREATE TABLE Document(
 	[ShortDiscription] [varchar](250) NULL,
 	[CreationDate] [datetime] NOT NULL,
 	[Path] [char](250) NOT NULL,
-	[Status] [varchar](200) NOT NULL,
 	[Size] [float](24) NOT NULL,
-	[EditsAndChanges] [varchar](200) NOT NULL,
 	[DocumentTypeID] [int] NOT NULL
 
 )ON [PRIMARY]
