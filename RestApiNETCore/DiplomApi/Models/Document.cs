@@ -7,8 +7,7 @@ namespace DiplomApi.Models
     {
         public Document()
         {
-            DocumentPathHistory = new HashSet<DocumentPathHistory>();
-            MonitoringInformation = new HashSet<MonitoringInformation>();
+            ActionHistory = new HashSet<ActionHistory>();
             SecurityInformation = new HashSet<SecurityInformation>();
         }
 
@@ -17,14 +16,11 @@ namespace DiplomApi.Models
         public string ShortDiscription { get; set; }
         public DateTime CreationDate { get; set; }
         public string Path { get; set; }
-        public string Status { get; set; }
         public float Size { get; set; }
-        public string EditsAndChanges { get; set; }
         public int DocumentTypeId { get; set; }
 
         public DocumentType DocumentType { get; set; }
-        public ICollection<DocumentPathHistory> DocumentPathHistory { get; set; }
-        public ICollection<MonitoringInformation> MonitoringInformation { get; set; }
+        public ICollection<ActionHistory> ActionHistory { get; set; }
         public ICollection<SecurityInformation> SecurityInformation { get; set; }
     }
 }

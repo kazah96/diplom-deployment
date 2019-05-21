@@ -8,7 +8,6 @@ namespace DiplomApi.Models
         public Company()
         {
             Employee = new HashSet<Employee>();
-            Network = new HashSet<Network>();
         }
 
         public int CompanyId { get; set; }
@@ -18,6 +17,5 @@ namespace DiplomApi.Models
         public string ContactDetails { get; set; }
 
         public ICollection<Employee> Employee { get; set; }
-        public ICollection<Network> Network { get; set; }
     }
 }

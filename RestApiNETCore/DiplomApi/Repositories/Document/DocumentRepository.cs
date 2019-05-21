@@ -67,16 +67,14 @@
         {
             using (IDbConnection conn = Connection)
             {
-                string sQuery = @"INSERT INTO Document(Name, ShortDiscription, Path, Status, Size, EditsAndChanges, DocumentTypeID) VALUES (@Name, @ShortDiscription, @Path, @Status, @Size, @EditsAndChanges, @DocumentTypeID)";
+                string sQuery = @"INSERT INTO Document(Name, ShortDiscription, Path, Size, DocumentTypeID) VALUES (@Name, @ShortDiscription, @Path, @Size, @DocumentTypeID)";
                 var result = await conn.ExecuteAsync(sQuery, 
                     new Document
                     {
                         Name = document.Name,
                         ShortDiscription = document.ShortDiscription,
                         Path = document.Path,
-                        Status = document.Status,
                         Size = document.Size,
-                        EditsAndChanges = document.EditsAndChanges,
                         DocumentTypeId = document.DocumentTypeId
                     });
             }

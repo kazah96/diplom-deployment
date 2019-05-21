@@ -4,28 +4,28 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace DiplomApi.Models
 {
-    public partial class DiplomDatabaseContext : DbContext
+    public partial class testDiplomDatabaseContext : DbContext
     {
-        public DiplomDatabaseContext()
+        public testDiplomDatabaseContext()
         {
         }
 
-        public DiplomDatabaseContext(DbContextOptions<DiplomDatabaseContext> options)
+        public testDiplomDatabaseContext(DbContextOptions<testDiplomDatabaseContext> options)
             : base(options)
         {
         }
 
         public virtual DbSet<AccessLevel> AccessLevel { get; set; }
         public virtual DbSet<Action> Action { get; set; }
+        public virtual DbSet<ActionAuthorization> ActionAuthorization { get; set; }
+        public virtual DbSet<ActionHistory> ActionHistory { get; set; }
+        public virtual DbSet<ActionStatus> ActionStatus { get; set; }
         public virtual DbSet<Company> Company { get; set; }
         public virtual DbSet<Document> Document { get; set; }
-        public virtual DbSet<DocumentPathHistory> DocumentPathHistory { get; set; }
         public virtual DbSet<DocumentType> DocumentType { get; set; }
         public virtual DbSet<Employee> Employee { get; set; }
-        public virtual DbSet<MonitoringInformation> MonitoringInformation { get; set; }
-        public virtual DbSet<Network> Network { get; set; }
+        public virtual DbSet<EmployeeLogging> EmployeeLogging { get; set; }
         public virtual DbSet<Position> Position { get; set; }
-        public virtual DbSet<RoutePoint> RoutePoint { get; set; }
         public virtual DbSet<SecurityInformation> SecurityInformation { get; set; }
         public virtual DbSet<Subdivision> Subdivision { get; set; }
 
@@ -34,7 +34,7 @@ namespace DiplomApi.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer(MetaInfo._connectionString);
+                optionsBuilder.UseSqlServer("Server=DESKTOP-Q31V8AK;Database=testDiplomDatabase;Trusted_Connection=True;");
             }
         }
 
@@ -42,12 +42,15 @@ namespace DiplomApi.Models
         {
             modelBuilder.Entity<AccessLevel>(entity =>
             {
-                entity.Property(e => e.AccessLevelId)
-                    .HasColumnName("AccessLevelID")
-                    .ValueGeneratedNever();
+                entity.Property(e => e.AccessLevelId).HasColumnName("AccessLevelID");
 
-                entity.Property(e => e.AccessName)
-                    .HasMaxLength(50)
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ShortDescription)
+                    .HasMaxLength(250)
                     .IsUnicode(false);
             });
 
@@ -57,6 +60,75 @@ namespace DiplomApi.Models
 
                 entity.Property(e => e.Name)
                     .IsRequired()
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ShortDescription)
+                    .HasMaxLength(250)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<ActionAuthorization>(entity =>
+            {
+                entity.Property(e => e.ActionAuthorizationId).HasColumnName("ActionAuthorizationID");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ShortDescription)
+                    .HasMaxLength(250)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<ActionHistory>(entity =>
+            {
+                entity.Property(e => e.ActionHistoryId).HasColumnName("ActionHistoryID");
+
+                entity.Property(e => e.ActionId).HasColumnName("ActionID");
+
+                entity.Property(e => e.ActionStatusId).HasColumnName("ActionStatusID");
+
+                entity.Property(e => e.Date)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.DocumentId).HasColumnName("DocumentID");
+
+                entity.Property(e => e.EmployeeId).HasColumnName("EmployeeID");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.Action)
+                    .WithMany(p => p.ActionHistory)
+                    .HasForeignKey(d => d.ActionId)
+                    .HasConstraintName("FK_ActionHistory_ActionID");
+
+                entity.HasOne(d => d.ActionStatus)
+                    .WithMany(p => p.ActionHistory)
+                    .HasForeignKey(d => d.ActionStatusId)
+                    .HasConstraintName("FK_ActionHistory_ActionStatusID");
+
+                entity.HasOne(d => d.Document)
+                    .WithMany(p => p.ActionHistory)
+                    .HasForeignKey(d => d.DocumentId)
+                    .HasConstraintName("FK_ActionHistory_DocumentID");
+
+                entity.HasOne(d => d.Employee)
+                    .WithMany(p => p.ActionHistory)
+                    .HasForeignKey(d => d.EmployeeId)
+                    .HasConstraintName("FK_ActionHistory_EmployeeID");
+            });
+
+            modelBuilder.Entity<ActionStatus>(entity =>
+            {
+                entity.Property(e => e.ActionStatusId).HasColumnName("ActionStatusID");
+
+                entity.Property(e => e.Name)
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
@@ -98,11 +170,6 @@ namespace DiplomApi.Models
 
                 entity.Property(e => e.DocumentTypeId).HasColumnName("DocumentTypeID");
 
-                entity.Property(e => e.EditsAndChanges)
-                    .IsRequired()
-                    .HasMaxLength(200)
-                    .IsUnicode(false);
-
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(100)
@@ -117,45 +184,10 @@ namespace DiplomApi.Models
                     .HasMaxLength(250)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Status)
-                    .IsRequired()
-                    .HasMaxLength(200)
-                    .IsUnicode(false);
-
                 entity.HasOne(d => d.DocumentType)
                     .WithMany(p => p.Document)
                     .HasForeignKey(d => d.DocumentTypeId)
                     .HasConstraintName("FK_Document_DocumentTypeID");
-            });
-
-            modelBuilder.Entity<DocumentPathHistory>(entity =>
-            {
-                entity.Property(e => e.DocumentPathHistoryId).HasColumnName("DocumentPathHistoryID");
-
-                entity.Property(e => e.DateAndTimeOfDispatch).HasColumnType("datetime");
-
-                entity.Property(e => e.DateAndTimeOfReceipt)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.DocumentId).HasColumnName("DocumentID");
-
-                entity.Property(e => e.EmployeeId).HasColumnName("EmployeeID");
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(200)
-                    .IsUnicode(false);
-
-                entity.HasOne(d => d.Document)
-                    .WithMany(p => p.DocumentPathHistory)
-                    .HasForeignKey(d => d.DocumentId)
-                    .HasConstraintName("FK_DocumentPathHistory_DocumentID");
-
-                entity.HasOne(d => d.Employee)
-                    .WithMany(p => p.DocumentPathHistory)
-                    .HasForeignKey(d => d.EmployeeId)
-                    .HasConstraintName("FK_DocumentPathHistory_EmployeeID");
             });
 
             modelBuilder.Entity<DocumentType>(entity =>
@@ -179,6 +211,7 @@ namespace DiplomApi.Models
                 entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
 
                 entity.Property(e => e.Email)
+                    .IsRequired()
                     .HasMaxLength(70)
                     .IsUnicode(false);
 
@@ -193,7 +226,7 @@ namespace DiplomApi.Models
 
                 entity.Property(e => e.Password)
                     .IsRequired()
-                    .HasMaxLength(32)
+                    .HasMaxLength(70)
                     .IsUnicode(false);
 
                 entity.Property(e => e.PositionId).HasColumnName("PositionID");
@@ -206,7 +239,7 @@ namespace DiplomApi.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.TelephoneNumber)
-                    .HasMaxLength(12)
+                    .HasMaxLength(25)
                     .IsUnicode(false);
 
                 entity.HasOne(d => d.Company)
@@ -225,53 +258,27 @@ namespace DiplomApi.Models
                     .HasConstraintName("FK_Employee_SubdivisionID");
             });
 
-            modelBuilder.Entity<MonitoringInformation>(entity =>
+            modelBuilder.Entity<EmployeeLogging>(entity =>
             {
-                entity.Property(e => e.MonitoringInformationId).HasColumnName("MonitoringInformationID");
+                entity.Property(e => e.EmployeeLoggingId).HasColumnName("EmployeeLoggingID");
 
-                entity.Property(e => e.DocumentId).HasColumnName("DocumentID");
+                entity.Property(e => e.ActionAuthorizationId).HasColumnName("ActionAuthorizationID");
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
+                entity.Property(e => e.Date)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.NetworkId).HasColumnName("NetworkID");
+                entity.Property(e => e.EmployeeId).HasColumnName("EmployeeID");
 
-                entity.Property(e => e.ShortDescription)
-                    .HasMaxLength(250)
-                    .IsUnicode(false);
+                entity.HasOne(d => d.ActionAuthorization)
+                    .WithMany(p => p.EmployeeLogging)
+                    .HasForeignKey(d => d.ActionAuthorizationId)
+                    .HasConstraintName("FK_EmployeeLogging_ActionAuthorizationID");
 
-                entity.HasOne(d => d.Document)
-                    .WithMany(p => p.MonitoringInformation)
-                    .HasForeignKey(d => d.DocumentId)
-                    .HasConstraintName("FK_MonitoringInformation_DocumentID");
-
-                entity.HasOne(d => d.Network)
-                    .WithMany(p => p.MonitoringInformation)
-                    .HasForeignKey(d => d.NetworkId)
-                    .HasConstraintName("FK_MonitoringInformation_NetworkID");
-            });
-
-            modelBuilder.Entity<Network>(entity =>
-            {
-                entity.Property(e => e.NetworkId).HasColumnName("NetworkID");
-
-                entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.ShortDiscription)
-                    .HasMaxLength(250)
-                    .IsUnicode(false);
-
-                entity.HasOne(d => d.Company)
-                    .WithMany(p => p.Network)
-                    .HasForeignKey(d => d.CompanyId)
-                    .HasConstraintName("FK_Network_CompanyID");
+                entity.HasOne(d => d.Employee)
+                    .WithMany(p => p.EmployeeLogging)
+                    .HasForeignKey(d => d.EmployeeId)
+                    .HasConstraintName("FK_EmployeeLogging_EmployeeID");
             });
 
             modelBuilder.Entity<Position>(entity =>
@@ -289,50 +296,15 @@ namespace DiplomApi.Models
                     .HasMaxLength(250)
                     .IsUnicode(false);
 
-                entity.HasOne(d => d.AccessLevel)
-                    .WithMany(p => p.Position)
-                    .HasForeignKey(d => d.AccessLevelId)
-                    .HasConstraintName("FK_Position_AccessLevel");
-            });
-
-            modelBuilder.Entity<RoutePoint>(entity =>
-            {
-                entity.Property(e => e.RoutePointId).HasColumnName("RoutePointID");
-
-                entity.Property(e => e.ActionId).HasColumnName("ActionID");
-
-                entity.Property(e => e.DocumentTypeId).HasColumnName("DocumentTypeID");
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.PositionId).HasColumnName("PositionID");
-
-                entity.Property(e => e.ShortDescription)
-                    .HasMaxLength(250)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.StageNumber)
+                entity.Property(e => e.ShortName)
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.HasOne(d => d.Action)
-                    .WithMany(p => p.RoutePoint)
-                    .HasForeignKey(d => d.ActionId)
-                    .HasConstraintName("FK_RoutePoint_ActionID");
-
-                entity.HasOne(d => d.DocumentType)
-                    .WithMany(p => p.RoutePoint)
-                    .HasForeignKey(d => d.DocumentTypeId)
-                    .HasConstraintName("FK_RoutePoint_DocumentTypeID");
-
-                entity.HasOne(d => d.Position)
-                    .WithMany(p => p.RoutePoint)
-                    .HasForeignKey(d => d.PositionId)
-                    .HasConstraintName("FK_RoutePoint_PositionID");
+                entity.HasOne(d => d.AccessLevel)
+                    .WithMany(p => p.Position)
+                    .HasForeignKey(d => d.AccessLevelId)
+                    .HasConstraintName("FK_Position_AccessLevelID");
             });
 
             modelBuilder.Entity<SecurityInformation>(entity =>
@@ -340,6 +312,11 @@ namespace DiplomApi.Models
                 entity.Property(e => e.SecurityInformationId).HasColumnName("SecurityInformationID");
 
                 entity.Property(e => e.DocumentId).HasColumnName("DocumentID");
+
+                entity.Property(e => e.Hash)
+                    .IsRequired()
+                    .HasMaxLength(150)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.Name)
                     .IsRequired()
