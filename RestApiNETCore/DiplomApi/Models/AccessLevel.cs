@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace DiplomApi.Models
 {
@@ -10,8 +11,9 @@ namespace DiplomApi.Models
         }
 
         public int AccessLevelId { get; set; }
-        public int AccessNumber { get; set; }
-        public string AccessName { get; set; }
+        public int Number { get; set; }
+        public string Name { get; set; }
+        public string ShortDescription { get; set; }
 
         public ICollection<Position> Position { get; set; }
     }

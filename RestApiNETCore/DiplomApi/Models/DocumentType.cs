@@ -8,7 +8,6 @@ namespace DiplomApi.Models
         public DocumentType()
         {
             Document = new HashSet<Document>();
-            RoutePoint = new HashSet<RoutePoint>();
         }
 
         public int DocumentTypeId { get; set; }
@@ -16,6 +15,5 @@ namespace DiplomApi.Models
         public string ShortDescription { get; set; }
 
         public ICollection<Document> Document { get; set; }
-        public ICollection<RoutePoint> RoutePoint { get; set; }
     }
 }

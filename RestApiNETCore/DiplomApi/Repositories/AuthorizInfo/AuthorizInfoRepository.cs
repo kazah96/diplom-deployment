@@ -47,7 +47,7 @@
                         string positionStringQuery = "SELECT Name, ShortDescription, AccessLevelId FROM Position WHERE PositionID = @PositionID";
                         IEnumerable<Position> positionResult = await conn.QueryAsync<Position>(positionStringQuery, new { PositionID = employeeResult.FirstOrDefault().PositionId });
 
-                        string accessLevelStringQuery = "SELECT AccessNumber, AccessName FROM AccessLevel WHERE AccessLevelID = @AccessLevelID";
+                        string accessLevelStringQuery = "SELECT Number, Name FROM AccessLevel WHERE AccessLevelID = @AccessLevelID";
                         IEnumerable<AccessLevel> accessLevelresult = await conn.QueryAsync<AccessLevel>(accessLevelStringQuery, new { AccessLevelID = positionResult.FirstOrDefault().AccessLevelId });
 
                         return new AuthorizInfo
@@ -59,8 +59,8 @@
                             Email = employeeResult.FirstOrDefault().Email,
                             PositionName = positionResult.FirstOrDefault().Name,
                             ShortDescriptionPositionName = positionResult.FirstOrDefault().ShortDescription,
-                            AccessName = accessLevelresult.FirstOrDefault().AccessName,
-                            AccessNumber = accessLevelresult.FirstOrDefault().AccessNumber
+                            AccessName = accessLevelresult.FirstOrDefault().Name,
+                            AccessNumber = accessLevelresult.FirstOrDefault().Number
                         };
                     }
                 }

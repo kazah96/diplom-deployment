@@ -7,7 +7,8 @@ namespace DiplomApi.Models
     {
         public Employee()
         {
-            DocumentPathHistory = new HashSet<DocumentPathHistory>();
+            ActionHistory = new HashSet<ActionHistory>();
+            EmployeeLogging = new HashSet<EmployeeLogging>();
         }
 
         public int EmployeeId { get; set; }
@@ -16,14 +17,15 @@ namespace DiplomApi.Models
         public string MiddleName { get; set; }
         public string TelephoneNumber { get; set; }
         public string Email { get; set; }
+        public string Password { get; set; }
         public int PositionId { get; set; }
         public int SubdivisionId { get; set; }
         public int CompanyId { get; set; }
-        public string Password { get; set; }
 
         public Company Company { get; set; }
         public Position Position { get; set; }
         public Subdivision Subdivision { get; set; }
-        public ICollection<DocumentPathHistory> DocumentPathHistory { get; set; }
+        public ICollection<ActionHistory> ActionHistory { get; set; }
+        public ICollection<EmployeeLogging> EmployeeLogging { get; set; }
     }
 }
