@@ -1,7 +1,7 @@
 const AddDocumentRequest = async (e) => {
 	e.preventDefault();
 
-	await fetch('https://localhost:5001/api/Document', {
+	await fetch('http://localhost:5000/api/Document', {
 		method: 'POST',
 		headers: {
 			'Accept': 'application/json',

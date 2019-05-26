@@ -12,7 +12,7 @@ class MenuItem extends Component {
 		};
 		this.menuItemClick = this.menuItemClick.bind(this);
 	}
-	
+	sdfsdf
 	menuItemClick() {
 		if(this.state.isToggleOn){
 			if(this.props.clickID === 'addDocument'){

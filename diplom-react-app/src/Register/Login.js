@@ -64,7 +64,7 @@ class Login extends Component {
 					this.state.registrationMode 
 						? < Registration updateData={ this.updateData }/> 
 						: <form className="text-center border border-light p-5">
-							<p className="h4 mb-4">Авторизация</p>
+							<p className="h4 mb-4">sdfsdfd</p>
 							<input type="email" id="emailLogin" className="form-control mb-4" autoComplete="on" placeholder="E-mail" onChange = { this.inputFormValues }/>
 							<input type="password" id="passwordLogin" className="form-control mb-4" autoComplete="on" placeholder="Пароль" onChange = { this.inputFormValues }/>
 							<div className="d-flex justify-content-around">

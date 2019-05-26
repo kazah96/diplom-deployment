@@ -29,6 +29,7 @@ class App extends Component {
 	render() {
 		return(
 			<div className="App">
+			asdasdasd
 				{
 					this.state.logIn 
 						? <Header userInfo={ this.state.userInfo } headerUpdateData={ this.headerUpdateData }/> 

@@ -1,5 +1,23 @@
-version: "3.4"
+version: "3"
 services:
-  ebala:
-    image: dotnet
-    ports: 5000
+    web:
+        build: ./RestApiNETCore/DiplomApi
+        ports:
+            - "5000:80"
+        depends_on:
+            - db
+    db:
+        image: "mcr.microsoft.com/mssql/server"
+        environment:
+            SA_PASSWORD: "poquePASS1234"
+            ACCEPT_EULA: "Y"
+        ports:
+            - "1433:1433"
+    client:
+        build: "./diplom-react-app"
+        volumes:
+          - ./diplom-react-app:/app:rw,cached
+        ports:
+          - "3000:3000"
+        
+

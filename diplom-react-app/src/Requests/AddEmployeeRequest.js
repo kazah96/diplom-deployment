@@ -1,5 +1,5 @@
 const AddEmployeeRequest = async (e) => {
-	return await fetch('https://localhost:5001/api/Employee', {
+	return await fetch('http://localhost:5000/api/Employee', {
 		method: 'POST',
 		headers: {
 			'Accept': 'application/json',
