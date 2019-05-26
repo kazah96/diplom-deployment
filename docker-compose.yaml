@@ -1,0 +1,5 @@
+version: "3.4"
+services:
+  ebala:
+    image: dotnet
+    ports: 5000
