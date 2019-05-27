@@ -1,0 +1,152 @@
+upstream api {
+    server app:9000;
+}
+
+upstream mercure-hub {
+    server mercure;
+}
+
+server {
+    listen 8080;
+
+    set $remote_root /app/public;
+    root $remote_root/api;
+
+    # Разрешить перезаписать real_ip, если предыдущий хост - доверенный
+    # upstream proxy = @api_proxy
+    set_real_ip_from  127.0.0.1;
+    real_ip_header X-Real-IP;
+
+    location / {
+        # try to serve file directly, fallback to index.php
+        try_files $uri /index.php$is_args$args;
+    }
+
+    location ~ ^/index\.php(/|$) {
+        fastcgi_pass api;
+
+        fastcgi_split_path_info ^(.+\.php)(/.*)$;
+        include fastcgi_params;
+        # When you are using symlinks to link the document root to the
+        # current version of your application, you should pass the real
+        # application path instead of the path to the symlink to PHP
+        # FPM.
+        # Otherwise, PHP's OPcache may not properly detect changes to
+        # your PHP files (see https://github.com/zendtech/ZendOptimizerPlus/issues/126
+        # for more information).
+
+        fastcgi_param SCRIPT_FILENAME $remote_root$fastcgi_script_name;
+        fastcgi_param DOCUMENT_ROOT $remote_root;
+
+        # set remote address from reverse proxy header
+        # @see https://easyengine.io/tutorials/nginx/forwarding-visitors-real-ip
+        fastcgi_param REMOTE_ADDR $http_x_real_ip;
+
+        # Prevents URIs that include the front controller. This will 404:
+        # http://domain.tld/index.php/some-path
+        # Remove the internal directive to allow URIs like this
+        internal;
+    }
+
+    # return 404 for all other php files not matching the front controller
+    # this prevents access to other php files you don't want to be accessible.
+    location ~ \.php$ {
+      return 404;
+    }
+}
+
+server {
+    set $api_proxy http://127.0.0.1:8080;
+    set $mercure_proxy http://mercure-hub;
+
+    root /app/public;
+
+    # upstream proxy subnet
+    set_real_ip_from 192.168.0.0/16;
+    real_ip_header X-Real-IP;
+
+    # Проксируем информацию для следующего прокси
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+
+    # Использовать не планируется, но лучше явно обработать
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Host $host;
+    proxy_set_header X-Forwarded-Proto $scheme;
+
+    # Для постоянных соединений и/или NTLM-авторизации
+    proxy_http_version 1.1;
+
+    location @api_proxy {
+        proxy_pass $api_proxy;
+
+#        # @see  https://ahrameev.ru/article/superskorostnojj-symfony-s-pomoshhyu-nginx.html
+#        proxy_cache super-speed-nginx;
+#        proxy_cache_key "$http_content_type::$scheme://$host$request_uri";
+#        proxy_cache_lock on;
+#        proxy_cache_use_stale updating error timeout http_500 http_502 http_503 http_504;
+#        add_header X-Cache $upstream_cache_status;
+    }
+
+    location / {
+        try_files $uri /index.html;
+        autoindex off;
+    }
+
+    location /admin {
+        try_files $uri /admin/index.html;
+        autoindex off;
+    }
+
+    location /mobile {
+        try_files $uri /mobile/index.html;
+        autoindex off;
+    }
+
+    location /static/ {
+        try_files $uri =404;
+    }
+
+    location /admin/static/ {
+        try_files $uri =404;
+    }
+
+    location /mobile/static/ {
+        try_files $uri =404;
+    }
+
+    location /bundles/ {
+        try_files /api/$uri /api/$uri/ =404;
+    }
+
+    location /upload/ {
+        try_files /api/$uri /api/$uri/ @api_proxy;
+    }
+
+    location /media/ {
+        internal;
+        proxy_pass $api_proxy;
+    }
+
+    location =/login_check {
+        proxy_pass $api_proxy;
+    }
+
+    location /api {
+        error_page 463 = @api_proxy;
+        return 463;
+    }
+
+    location /hub {
+        proxy_pass $mercure_proxy;
+        proxy_read_timeout 24h;
+        proxy_http_version 1.1;
+        proxy_set_header Connection "";
+    }
+
+    # return 404 for all other php files not matching the front controller
+    # this prevents access to other php files you don't want to be accessible.
+    location ~ \.php$ {
+      return 404;
+    }
+}

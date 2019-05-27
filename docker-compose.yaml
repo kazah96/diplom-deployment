@@ -7,17 +7,25 @@ services:
         depends_on:
             - db
     db:
-        image: "mcr.microsoft.com/mssql/server"
+        build: "./docker/db"
         environment:
             SA_PASSWORD: "poquePASS1234"
             ACCEPT_EULA: "Y"
         ports:
             - "1433:1433"
+        volumes:
+          - ./SQL scripts:/scripts:rw,cached
     client:
         build: "./diplom-react-app"
         volumes:
           - ./diplom-react-app:/app:rw,cached
         ports:
           - "3000:3000"
-        
+    nginx:
+        build: ./docker/nginx
+        ports: 
+            - "80:8080"
+        depends_on:
+            - client
+            - web
 
