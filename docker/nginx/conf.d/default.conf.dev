@@ -1,6 +1,52 @@
+upstream api {
+    server web:80;
+}
+
+upstream client-dev-server {
+    server client:3000;
+}
+
 server {
-    listen 80;
+    set $api_proxy http://api;
+    set $client_proxy http://client-dev-server;
+    set $admin_proxy http://client-dev-server/admin;
+    set $mobile_proxy http://client-dev-server/mobile;
+
+    root /app/public;
+
+
+    # upstream proxy subnet... не используется пока. Это крайний сервер
+    # set_real_ip_from 192.168.0.0/16;
+    #real_ip_header X-Real-IP;
+
+    # Проксируем информацию для следующего прокси
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+
+    # Использовать не планируется, но лучше явно обработать
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Host $host;
+    proxy_set_header X-Forwarded-Proto $scheme;
+
+    # Для постоянных соединений и/или NTLM-авторизации
+    proxy_http_version 1.1;
+
+    location @api_proxy {
+        proxy_pass $api_proxy;
+    }
+
     location / {
-        proxy_pass  http://localhost:3000/;
+        proxy_pass $client_proxy;
+    }
+
+    location /api {
+        proxy_pass $api_proxy;
+    }
+
+
+    # return 404 for all other php files not matching the front controller
+    # this prevents access to other php files you don't want to be accessible.
+    location ~ \.php$ {
+      return 404;
     }
 }

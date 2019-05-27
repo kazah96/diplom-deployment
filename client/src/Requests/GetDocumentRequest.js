@@ -1,5 +1,5 @@
 const GetDocumentRequest = async (component) =>
-	await fetch('http://localhost:5000/api/Document')
+	await fetch('/api/Document')
 		.then(res => res.json())
 		.then(json => {
 			component.setState({

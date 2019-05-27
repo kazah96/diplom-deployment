@@ -1,15 +1,16 @@
 # ----------------------Frontend app----------------------
 
 # dependencies
-diplom-react-app/node_modules
-diplom-react-app/.pnp
-diplom-react-app.pnp.js
+client/node_modules
+client/.pnp
+client.pnp.js
+client/package-lock.json*
 
 # testing
-diplom-react-app/coverage
+client/coverage
 
 # production
-diplom-react-app/build
+client/build
 
 # misc
 .DS_Store
@@ -258,3 +259,5 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
+client/package-lock.json
+client/package-lock.json
