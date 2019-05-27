@@ -6,7 +6,6 @@ class InputForm extends Component {
 		return (
 			<form onSubmit={ this.props.addDocumentMethod }>
 				<div className="container">
-				asdasdasw
 					<div className="row">
 						<input type="text" className="form-control" name="name" placeholder="Название документа"/>              
 						<input type="text" className="form-control" name="shortDiscription" placeholder="Краткое описание документа"/>
