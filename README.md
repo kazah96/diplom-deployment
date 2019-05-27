@@ -4,6 +4,6 @@
 
 ```cd diplom-deployment```
 
-```docker-compose build --parallel```
+```docker-compose build```
 
 ```docker-compose up```
